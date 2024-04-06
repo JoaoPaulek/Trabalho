@@ -1,0 +1,52 @@
+// Nome: João Paulek
+// Data: 05/04/2024
+// Descrição da atividade: Programa em Dart que calcula a média das notas de uma lista de alunos e determina quais alunos foram
+//aprovados baseado na nota igual ou superior à média calculada
+
+import 'dart:io';
+
+void main() {
+  // Lista de alunos
+  List<Map<String, dynamic>> alunos = [];
+
+  // Solicita o nome e nota de cada aluno
+  while (true) {
+    stdout.write('Digite o nome do aluno (ou "sair" para encerrar):\n');
+    String nome = stdin.readLineSync()!;
+    if (nome.toLowerCase() == 'sair') break;
+    stdout.write('Digite a nota do aluno:\n');
+    double nota = double.parse(stdin.readLineSync()!);
+    alunos.add({'nome': nome, 'nota': nota});
+  }
+
+  // Verifica se a lista não está vazia
+  if (alunos.isNotEmpty) {
+    // Calcula a média das notas
+    double media = calcularMedia(alunos);
+
+    // Identifica os alunos aprovados
+    List<Map<String, dynamic>> aprovados = identificarAprovados(alunos, media);
+
+    // Imprimi os resultados
+    print('\nMédia das notas: $media');
+    print('Alunos aprovados:');
+    for (var aluno in aprovados) {
+      print('${aluno['nome']} - ${aluno['nota']}');
+    }
+  } else {
+    print('Nenhum aluno inserido.');
+  }
+}
+
+// Função que calcula a média das notas
+double calcularMedia(List<Map<String, dynamic>> alunos) {
+  double somaNotas =
+      alunos.map((aluno) => aluno['nota']).reduce((a, b) => a + b);
+  return somaNotas / alunos.length;
+}
+
+// Função que identifica os alunos aprovados
+List<Map<String, dynamic>> identificarAprovados(
+    List<Map<String, dynamic>> alunos, double media) {
+  return alunos.where((aluno) => aluno['nota'] >= media).toList();
+}
